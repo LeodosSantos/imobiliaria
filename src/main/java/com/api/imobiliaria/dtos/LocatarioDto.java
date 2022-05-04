@@ -1,45 +1,23 @@
-package com.api.imobiliaria.models;
+package com.api.imobiliaria.dtos;
 
-import java.io.Serializable;
 import java.util.List;
-import java.util.UUID;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
-@Entity
-@Table(name = "TB_LOCATARIO")
-public class LocatarioModel implements Serializable {
+import com.api.imobiliaria.models.ImovelModel;
 
-	private static final long serialVersionUID = 1L;
+public class LocatarioDto {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private UUID id;
-	@Column(length = 100)
+	@NotBlank
 	private String nomeLocatario;
-	@Column(nullable = false, length = 15)
+	@NotBlank
 	private String cpfLocatario;
-	@Column(nullable = false, length = 22)
+	@NotBlank
 	private String telefone;
-	@Column(nullable = false, length = 60)
+	@NotBlank
 	private String emailLocatario;
 
-	@OneToMany(mappedBy = "locatarioModel")
 	private List<ImovelModel> imovelModel;
-
-	public UUID getId() {
-		return id;
-	}
-
-	public void setId(UUID id) {
-		this.id = id;
-	}
 
 	public String getNomeLocatario() {
 		return nomeLocatario;
@@ -80,5 +58,6 @@ public class LocatarioModel implements Serializable {
 	public void setImovelModel(List<ImovelModel> imovelModel) {
 		this.imovelModel = imovelModel;
 	}
+	
 
 }

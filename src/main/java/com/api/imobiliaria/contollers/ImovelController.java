@@ -21,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.imobiliaria.dtos.ImovelDto;
+import com.api.imobiliaria.dtos.LocatarioDto;
 import com.api.imobiliaria.models.ImovelModel;
+import com.api.imobiliaria.models.LocatarioModel;
 import com.api.imobiliaria.services.ImovelService;
+import com.api.imobiliaria.services.LocatarioService;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -30,15 +33,25 @@ import com.api.imobiliaria.services.ImovelService;
 public class ImovelController {
 
 	final ImovelService imovelService; //inicializa ponto de injecao
+	final LocatarioService locatarioService;
 
-	public ImovelController (ImovelService imovelService) {
+	public ImovelController (ImovelService imovelService,LocatarioService locatarioService ) {
 		this.imovelService = imovelService;
-		
-	
+		this.locatarioService = locatarioService;
 	}
 	
 //Metodo para cadastrar ou criar uma instancia
 	
+	
+	@PostMapping("/locatario")
+	public ResponseEntity<Object>saveLocatario(@RequestBody @Valid LocatarioDto locatarioDto){
+		var locatarioModel = new LocatarioModel();
+		BeanUtils.copyProperties(locatarioDto, locatarioModel);
+		//locatarioModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+		return ResponseEntity.status(HttpStatus.CREATED).body(locatarioService.save(locatarioModel));
+	}
+	
+			
 	@PostMapping
 	public ResponseEntity<Object>saveImovel(@RequestBody @Valid ImovelDto imovelDto){
 		var imovelModel = new ImovelModel();

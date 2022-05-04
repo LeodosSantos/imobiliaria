@@ -18,7 +18,6 @@ import javax.persistence.Table;
 public class ImovelModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
@@ -34,55 +33,73 @@ public class ImovelModel implements Serializable {
 	private String locatarioImovel;
 	@Column(nullable = false)
 	private LocalDateTime registrationDate;
-	
+
 	@ManyToOne
-    @JoinColumn(name="LOCATARIO_ID", nullable=false)
+	@JoinColumn(name = "LOCATARIO_ID", nullable = false)
 	private LocatarioModel locatarioModel;
-	
-	
-	
+
 	public UUID getId() {
 		return id;
 	}
+
 	public void setId(UUID id) {
 		this.id = id;
 	}
+
 	public String getTipoImovel() {
 		return tipoImovel;
 	}
+
 	public void setTipoImovel(String tipoImovel) {
 		this.tipoImovel = tipoImovel;
 	}
+
 	public String getEnderecoImovel() {
 		return enderecoImovel;
 	}
+
 	public void setEnderecoImovel(String enderecoImovel) {
 		this.enderecoImovel = enderecoImovel;
 	}
+
 	public boolean isGaragemImovel() {
 		return garagemImovel;
 	}
+
 	public void setGaragemImovel(boolean garagemImovel) {
 		this.garagemImovel = garagemImovel;
 	}
+
 	public String getLocadorImovel() {
 		return locadorImovel;
 	}
+
 	public void setLocadorImovel(String locadorImovel) {
 		this.locadorImovel = locadorImovel;
 	}
-	
+
 	public LocalDateTime getRegistrationDate() {
 		return registrationDate;
 	}
+
 	public void setRegistrationDate(LocalDateTime registrationDate) {
 		this.registrationDate = registrationDate;
 	}
+
 	public String getLocatarioImovel() {
 		return locatarioImovel;
 	}
+
 	public void setLocatarioImovel(String locatarioImovel) {
 		this.locatarioImovel = locatarioImovel;
+	}
+
+	public LocatarioModel getLocatarioModel() {
+		return locatarioModel;
+	}
+
+	public void setLocatarioModel(LocatarioModel locatarioModel) {
+		this.locatarioModel = locatarioModel;
 	}
 
 }

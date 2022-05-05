@@ -1,5 +1,7 @@
 package com.api.imobiliaria.services;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,6 +10,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.api.imobiliaria.models.ImovelModel;
 import com.api.imobiliaria.models.LocatarioModel;
 import com.api.imobiliaria.repositories.LocatarioRepository;
 
@@ -22,6 +25,12 @@ public class LocatarioService {
 
 	@Transactional
 	public LocatarioModel save(LocatarioModel locatarioModel) {
+		if(locatarioModel.getImoveis() != null) {
+			for(ImovelModel imovelModel : locatarioModel.getImoveis()) {
+				imovelModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+				imovelModel.setLocatario(locatarioModel);
+			}
+		}
 		return locatarioRepository.save(locatarioModel);
 	}
 

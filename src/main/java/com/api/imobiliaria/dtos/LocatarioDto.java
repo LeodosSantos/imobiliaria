@@ -1,13 +1,13 @@
 package com.api.imobiliaria.dtos;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.validation.constraints.NotBlank;
 
-import com.api.imobiliaria.models.ImovelModel;
-
 public class LocatarioDto {
-
+	
+	private UUID id;
 	@NotBlank
 	private String nomeLocatario;
 	@NotBlank
@@ -17,7 +17,7 @@ public class LocatarioDto {
 	@NotBlank
 	private String emailLocatario;
 
-	private List<ImovelModel> imovelModel;
+	private List<ImovelDto> imoveis;
 
 	public String getNomeLocatario() {
 		return nomeLocatario;
@@ -51,13 +51,21 @@ public class LocatarioDto {
 		this.emailLocatario = emailLocatario;
 	}
 
-	public List<ImovelModel> getImovelModel() {
-		return imovelModel;
+	
+	public UUID getId() {
+		return id;
 	}
 
-	public void setImovelModel(List<ImovelModel> imovelModel) {
-		this.imovelModel = imovelModel;
+	public void setId(UUID id) {
+		this.id = id;
 	}
-	
+
+	public List<ImovelDto> getImoveis() {
+		return imoveis;
+	}
+
+	public void setImoveis(List<ImovelDto> imoveis) {
+		this.imoveis = imoveis;
+	}
 
 }

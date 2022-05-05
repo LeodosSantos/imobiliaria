@@ -1,9 +1,11 @@
 package com.api.imobiliaria.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,8 +32,8 @@ public class LocatarioModel implements Serializable {
 	@Column(nullable = false, length = 60)
 	private String emailLocatario;
 
-	@OneToMany(mappedBy = "locatarioModel")
-	private List<ImovelModel> imovelModel;
+	@OneToMany(mappedBy = "locatario", cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
+	private List<ImovelModel> imoveis = new ArrayList<ImovelModel>();
 
 	public UUID getId() {
 		return id;
@@ -73,12 +75,12 @@ public class LocatarioModel implements Serializable {
 		this.emailLocatario = emailLocatario;
 	}
 
-	public List<ImovelModel> getImovelModel() {
-		return imovelModel;
+	public List<ImovelModel> getImoveis() {
+		return imoveis;
 	}
 
-	public void setImovelModel(List<ImovelModel> imovelModel) {
-		this.imovelModel = imovelModel;
+	public void setImoveis(List<ImovelModel> imoveis) {
+		this.imoveis = imoveis;
 	}
 
 }

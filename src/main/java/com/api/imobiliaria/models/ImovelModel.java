@@ -29,14 +29,12 @@ public class ImovelModel implements Serializable {
 	private boolean garagemImovel;
 	@Column(nullable = false, length = 10)
 	private String locadorImovel;
-	@Column(nullable = false, length = 10)
-	private String locatarioImovel;
 	@Column(nullable = false)
 	private LocalDateTime registrationDate;
 
 	@ManyToOne
 	@JoinColumn(name = "LOCATARIO_ID", nullable = false)
-	private LocatarioModel locatarioModel;
+	private LocatarioModel locatario;
 
 	public UUID getId() {
 		return id;
@@ -86,20 +84,13 @@ public class ImovelModel implements Serializable {
 		this.registrationDate = registrationDate;
 	}
 
-	public String getLocatarioImovel() {
-		return locatarioImovel;
+	public LocatarioModel getLocatario() {
+		return locatario;
 	}
 
-	public void setLocatarioImovel(String locatarioImovel) {
-		this.locatarioImovel = locatarioImovel;
+	public void setLocatario(LocatarioModel locatario) {
+		this.locatario = locatario;
 	}
 
-	public LocatarioModel getLocatarioModel() {
-		return locatarioModel;
-	}
-
-	public void setLocatarioModel(LocatarioModel locatarioModel) {
-		this.locatarioModel = locatarioModel;
-	}
 
 }

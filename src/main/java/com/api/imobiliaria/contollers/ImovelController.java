@@ -47,8 +47,16 @@ public class ImovelController {
 	public ResponseEntity<Object>saveLocatario(@RequestBody @Valid LocatarioDto locatarioDto){
 		var locatarioModel = new LocatarioModel();
 		BeanUtils.copyProperties(locatarioDto, locatarioModel);
-		//locatarioModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-		return ResponseEntity.status(HttpStatus.CREATED).body(locatarioService.save(locatarioModel));
+		ImovelModel imovelModel;
+		for(ImovelDto imovelDto : locatarioDto.getImoveis()) {
+			imovelModel = new ImovelModel(); 
+			BeanUtils.copyProperties(imovelDto, imovelModel);
+			locatarioModel.getImoveis().add(imovelModel);
+		}
+		
+		locatarioModel=locatarioService.save(locatarioModel);
+		BeanUtils.copyProperties(locatarioModel, locatarioDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(locatarioDto);
 	}
 	
 			

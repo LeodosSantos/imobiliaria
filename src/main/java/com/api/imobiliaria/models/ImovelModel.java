@@ -23,11 +23,11 @@ public class ImovelModel implements Serializable {
 	private UUID id;
 	@Column(nullable = false, length = 10)
 	private String tipoImovel;
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false, length = 100)
 	private String enderecoImovel;
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false, length = 1)
 	private boolean garagemImovel;
-	@Column(nullable = false, length = 10)
+	@Column(nullable = false, length = 100)
 	private String locadorImovel;
 	@Column(nullable = false)
 	private LocalDateTime registrationDate;

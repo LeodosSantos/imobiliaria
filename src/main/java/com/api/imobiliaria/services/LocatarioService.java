@@ -25,12 +25,6 @@ public class LocatarioService {
 
 	@Transactional
 	public LocatarioModel save(LocatarioModel locatarioModel) {
-		if(locatarioModel.getImoveis() != null) {
-			for(ImovelModel imovelModel : locatarioModel.getImoveis()) {
-				imovelModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-				imovelModel.setLocatario(locatarioModel);
-			}
-		}
 		return locatarioRepository.save(locatarioModel);
 	}
 

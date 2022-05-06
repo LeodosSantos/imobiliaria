@@ -32,68 +32,71 @@ import com.api.imobiliaria.services.LocatarioService;
 @RequestMapping("/imobiliaria")
 public class ImovelController {
 
-	final ImovelService imovelService; //inicializa ponto de injecao
+	final ImovelService imovelService; // inicializa ponto de injecao
 	final LocatarioService locatarioService;
 
-	public ImovelController (ImovelService imovelService,LocatarioService locatarioService ) {
+	public ImovelController(ImovelService imovelService, LocatarioService locatarioService) {
 		this.imovelService = imovelService;
 		this.locatarioService = locatarioService;
 	}
-	
+
 //Metodo para cadastrar ou criar uma instancia
-	
-	
+
 	@PostMapping("/locatario")
-	public ResponseEntity<Object>saveLocatario(@RequestBody @Valid LocatarioDto locatarioDto){
+	public ResponseEntity<Object> saveLocatario(@RequestBody @Valid LocatarioDto locatarioDto) {
 		var locatarioModel = new LocatarioModel();
 		BeanUtils.copyProperties(locatarioDto, locatarioModel);
 		ImovelModel imovelModel;
-		for(ImovelDto imovelDto : locatarioDto.getImoveis()) {
-			imovelModel = new ImovelModel(); 
-			BeanUtils.copyProperties(imovelDto, imovelModel);
-			locatarioModel.getImoveis().add(imovelModel);
+		if (locatarioDto.getImoveis() != null) {
+			for (ImovelDto imovelDto : locatarioDto.getImoveis()) {
+				imovelModel = new ImovelModel();
+				BeanUtils.copyProperties(imovelDto, imovelModel);
+				imovelModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
+				imovelModel.setLocatario(locatarioModel);
+				locatarioModel.getImoveis().add(imovelModel);
+			}
+			
 		}
-		
-		locatarioModel=locatarioService.save(locatarioModel);
+
+		locatarioModel = locatarioService.save(locatarioModel);
 		BeanUtils.copyProperties(locatarioModel, locatarioDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(locatarioDto);
 	}
-	
-			
+
 	@PostMapping
-	public ResponseEntity<Object>saveImovel(@RequestBody @Valid ImovelDto imovelDto){
+	public ResponseEntity<Object> saveImovel(@RequestBody @Valid ImovelDto imovelDto) {
 		var imovelModel = new ImovelModel();
 		BeanUtils.copyProperties(imovelDto, imovelModel);
 		imovelModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
 		return ResponseEntity.status(HttpStatus.CREATED).body(imovelService.save(imovelModel));
 	}
-	
+
 	@GetMapping // gera uma listagem de com todas as instancias - getAll//
-	public ResponseEntity<List<ImovelModel>>getAllImovel(){
-		return ResponseEntity.status(HttpStatus.OK).body(imovelService.findAll());	
+	public ResponseEntity<List<ImovelModel>> getAllImovel() {
+		return ResponseEntity.status(HttpStatus.OK).body(imovelService.findAll());
 	}
-	
+
 	@GetMapping("/id") // BUSCA UM ID EPECIFICO
-	public ResponseEntity<Object> getOneImovel (@PathVariable(value = "id") UUID id){
-		Optional<ImovelModel>imovelModelOptional = imovelService.findById(id);
-		if(!imovelModelOptional.isPresent()) {
+	public ResponseEntity<Object> getOneImovel(@PathVariable(value = "id") UUID id) {
+		Optional<ImovelModel> imovelModelOptional = imovelService.findById(id);
+		if (!imovelModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" Imovel not found");
-			
-	}
-			
+
+		}
+
 		return ResponseEntity.status(HttpStatus.OK).body(imovelModelOptional.get());
-	
+
 	}
-	
+
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Object> deleteImobiliaria(@PathVariable(value=" id")UUID id){
+	public ResponseEntity<Object> deleteImobiliaria(@PathVariable(value = " id") UUID id) {
 		Optional<ImovelModel> imovelModelOptional = imovelService.findById(id);
 		if (!imovelModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" Imobiliaria not found. ");
 		}
 		imovelService.delete(imovelModelOptional.get());
 		return ResponseEntity.status(HttpStatus.OK).body("Imobiliaria deleted successfully. ");
-		
+
 	}
-	
+
 }

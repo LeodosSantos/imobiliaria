@@ -14,8 +14,6 @@ public class ImovelDto {
 	private String enderecoImovel;
 	@NotNull
 	private boolean garagemImovel;
-	@NotBlank
-	private String locadorImovel;
 	
 	public String getTipoImovel() {
 		return tipoImovel;
@@ -35,12 +33,7 @@ public class ImovelDto {
 	public void setGaragemImovel(boolean garagemImovel) {
 		this.garagemImovel = garagemImovel;
 	}
-	public String getLocadorImovel() {
-		return locadorImovel;
-	}
-	public void setLocadorImovel(String locadorImovel) {
-		this.locadorImovel = locadorImovel;
-	}
+	
 	public UUID getId() {
 		return id;
 	}

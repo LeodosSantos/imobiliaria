@@ -5,10 +5,10 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.api.imobiliaria.models.LocatarioModel;
+import com.api.imobiliaria.models.ClienteModel;
 
 @Repository  // NÃO É OBRIGATÓRIO DECLARAR, NESTE CASO, PORQUE FOI EXTENDIDO
-public interface LocatarioRepository extends JpaRepository<LocatarioModel, UUID> {
+public interface ClienteRepository extends JpaRepository<ClienteModel, UUID> {
 	
 	// Criando queries manualmente
 //	@Query("select * from ImovelModel where tipo =:tipo")

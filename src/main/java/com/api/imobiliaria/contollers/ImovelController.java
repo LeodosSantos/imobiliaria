@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.api.imobiliaria.dtos.ImovelDto;
-import com.api.imobiliaria.dtos.LocatarioDto;
+import com.api.imobiliaria.dtos.ClienteDto;
 import com.api.imobiliaria.models.ImovelModel;
-import com.api.imobiliaria.models.LocatarioModel;
+import com.api.imobiliaria.models.ClienteModel;
 import com.api.imobiliaria.services.ImovelService;
-import com.api.imobiliaria.services.LocatarioService;
+import com.api.imobiliaria.services.ClienteService;
 
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
@@ -33,9 +33,9 @@ import com.api.imobiliaria.services.LocatarioService;
 public class ImovelController {
 
 	final ImovelService imovelService; // inicializa ponto de injecao
-	final LocatarioService locatarioService;
+	final ClienteService locatarioService;
 
-	public ImovelController(ImovelService imovelService, LocatarioService locatarioService) {
+	public ImovelController(ImovelService imovelService, ClienteService locatarioService) {
 		this.imovelService = imovelService;
 		this.locatarioService = locatarioService;
 	}
@@ -43,24 +43,24 @@ public class ImovelController {
 //Metodo para cadastrar ou criar uma instancia
 
 	@PostMapping("/locatario")
-	public ResponseEntity<Object> saveLocatario(@RequestBody @Valid LocatarioDto locatarioDto) {
-		var locatarioModel = new LocatarioModel();
-		BeanUtils.copyProperties(locatarioDto, locatarioModel);
+	public ResponseEntity<Object> saveLocatario(@RequestBody @Valid ClienteDto clienteDto) {
+		var clienteModel = new ClienteModel();
+		BeanUtils.copyProperties(clienteDto, clienteModel);
 		ImovelModel imovelModel;
-		if (locatarioDto.getImoveis() != null) {
-			for (ImovelDto imovelDto : locatarioDto.getImoveis()) {
+		if (clienteDto.getImoveisProprietario() != null) {
+			for (ImovelDto imovelDto : clienteDto.getImoveisProprietario()) {
 				imovelModel = new ImovelModel();
 				BeanUtils.copyProperties(imovelDto, imovelModel);
 				imovelModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-				imovelModel.setLocatario(locatarioModel);
-				locatarioModel.getImoveis().add(imovelModel);
+				imovelModel.setLocatario(clienteModel);
+				clienteModel.getImoveisProprietario().add(imovelModel);
 			}
 			
 		}
 
-		locatarioModel = locatarioService.save(locatarioModel);
-		BeanUtils.copyProperties(locatarioModel, locatarioDto);
-		return ResponseEntity.status(HttpStatus.CREATED).body(locatarioDto);
+		clienteModel = locatarioService.save(clienteModel);
+		BeanUtils.copyProperties(clienteModel, clienteDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(clienteDto);
 	}
 
 	@PostMapping

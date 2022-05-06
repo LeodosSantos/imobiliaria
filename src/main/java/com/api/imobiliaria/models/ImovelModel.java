@@ -27,14 +27,21 @@ public class ImovelModel implements Serializable {
 	private String enderecoImovel;
 	@Column(nullable = false, length = 1)
 	private boolean garagemImovel;
-	@Column(nullable = false, length = 100)
-	private String locadorImovel;
+	
 	@Column(nullable = false)
 	private LocalDateTime registrationDate;
 
 	@ManyToOne
-	@JoinColumn(name = "LOCATARIO_ID", nullable = false)
-	private LocatarioModel locatario;
+	@JoinColumn(name = "LOCATARIO_ID")
+	private ClienteModel locatario;
+		
+	@ManyToOne
+	@JoinColumn(name = "LOCADOR_ID")
+	private ClienteModel locador;
+	
+	@ManyToOne
+	@JoinColumn(name = "PROPRIETARIO_ID")
+	private ClienteModel proprietario;
 
 	public UUID getId() {
 		return id;
@@ -68,14 +75,6 @@ public class ImovelModel implements Serializable {
 		this.garagemImovel = garagemImovel;
 	}
 
-	public String getLocadorImovel() {
-		return locadorImovel;
-	}
-
-	public void setLocadorImovel(String locadorImovel) {
-		this.locadorImovel = locadorImovel;
-	}
-
 	public LocalDateTime getRegistrationDate() {
 		return registrationDate;
 	}
@@ -84,13 +83,29 @@ public class ImovelModel implements Serializable {
 		this.registrationDate = registrationDate;
 	}
 
-	public LocatarioModel getLocatario() {
+	public ClienteModel getLocatario() {
 		return locatario;
 	}
 
-	public void setLocatario(LocatarioModel locatario) {
+	public void setLocatario(ClienteModel locatario) {
 		this.locatario = locatario;
 	}
 
+	public ClienteModel getLocador() {
+		return locador;
+	}
+
+	public void setLocador(ClienteModel locador) {
+		this.locador = locador;
+	}
+
+	public ClienteModel getProprietario() {
+		return proprietario;
+	}
+
+	public void setProprietario(ClienteModel proprietario) {
+		this.proprietario = proprietario;
+	}
+	
 
 }

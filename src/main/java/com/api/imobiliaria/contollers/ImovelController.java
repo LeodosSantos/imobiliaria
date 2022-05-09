@@ -2,6 +2,7 @@ package com.api.imobiliaria.contollers;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.api.imobiliaria.dtos.ImovelDto;
 import com.api.imobiliaria.dtos.ClienteDto;
+import com.api.imobiliaria.dtos.ImovelComProprietarioDto;
 import com.api.imobiliaria.models.ImovelModel;
 import com.api.imobiliaria.models.ClienteModel;
 import com.api.imobiliaria.services.ImovelService;
@@ -64,11 +66,23 @@ public class ImovelController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> saveImovel(@RequestBody @Valid ImovelDto imovelDto) {
+	public ResponseEntity<Object> saveImovelComProprietario(@RequestBody @Valid ImovelComProprietarioDto imovelComProprietarioDto) {
 		var imovelModel = new ImovelModel();
-		BeanUtils.copyProperties(imovelDto, imovelModel);
+		BeanUtils.copyProperties(imovelComProprietarioDto, imovelModel);
+		if(imovelComProprietarioDto.getProprietario() != null) {
+			var proprietarioModel = new ClienteModel();
+			List<ImovelModel> imoveis = new ArrayList<ImovelModel>();
+			imoveis.add(imovelModel);	
+			BeanUtils.copyProperties(imovelComProprietarioDto.getProprietario() , proprietarioModel);
+			imovelModel.setProprietario(proprietarioModel);
+			proprietarioModel.setImoveisProprietario(imoveis);
+					
+		}
+		
 		imovelModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
-		return ResponseEntity.status(HttpStatus.CREATED).body(imovelService.save(imovelModel));
+		imovelModel = imovelService.save(imovelModel);
+		BeanUtils.copyProperties( imovelModel, imovelComProprietarioDto);
+		return ResponseEntity.status(HttpStatus.CREATED).body(imovelComProprietarioDto);
 	}
 
 	@GetMapping // gera uma listagem de com todas as instancias - getAll//

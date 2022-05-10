@@ -14,12 +14,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "TB_IMOVEL")
 public class ImovelModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Type(type = "org.hibernate.type.UUIDCharType")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	@Column(nullable = false, length = 10)

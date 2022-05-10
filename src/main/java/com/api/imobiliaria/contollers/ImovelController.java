@@ -85,12 +85,13 @@ public class ImovelController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(imovelComProprietarioDto);
 	}
 
-	@GetMapping // gera uma listagem de com todas as instancias - getAll//
+	@GetMapping("/getAll") // gera uma listagem de com todas as instancias - getAll//
 	public ResponseEntity<List<ImovelModel>> getAllImovel() {
-		return ResponseEntity.status(HttpStatus.OK).body(imovelService.findAll());
+		List<ImovelModel> findAll = imovelService.findAll();
+		return ResponseEntity.status(HttpStatus.OK).body(findAll);
 	}
 
-	@GetMapping("/id") // BUSCA UM ID EPECIFICO
+	@GetMapping("/{id}") // BUSCA UM ID EPECIFICO
 	public ResponseEntity<Object> getOneImovel(@PathVariable(value = "id") UUID id) {
 		Optional<ImovelModel> imovelModelOptional = imovelService.findById(id);
 		if (!imovelModelOptional.isPresent()) {

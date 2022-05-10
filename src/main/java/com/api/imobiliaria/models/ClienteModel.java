@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 @Table(name = "TB_CLIENTE")
 public class ClienteModel implements Serializable {
@@ -21,6 +23,7 @@ public class ClienteModel implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@Type(type = "org.hibernate.type.UUIDCharType")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private UUID id;
 	@Column(length = 100)

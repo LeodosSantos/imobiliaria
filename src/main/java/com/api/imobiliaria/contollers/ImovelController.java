@@ -30,6 +30,7 @@ import com.api.imobiliaria.models.ImovelModel;
 import com.api.imobiliaria.services.ClienteService;
 import com.api.imobiliaria.services.ImovelService;
 
+
 @RestController
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RequestMapping("/imobiliaria")
@@ -58,7 +59,7 @@ public class ImovelController {
 				imovelModel.setLocatario(clienteModel);
 				clienteModel.getImoveisProprietario().add(imovelModel);
 			}
-			
+
 		}
 
 		clienteModel = locatarioService.save(clienteModel);
@@ -67,22 +68,23 @@ public class ImovelController {
 	}
 
 	@PostMapping
-	public ResponseEntity<Object> saveImovelComProprietario(@RequestBody @Valid ImovelComProprietarioDto imovelComProprietarioDto) {
+	public ResponseEntity<Object> saveImovelComProprietario(
+			@RequestBody @Valid ImovelComProprietarioDto imovelComProprietarioDto) {
 		var imovelModel = new ImovelModel();
 		BeanUtils.copyProperties(imovelComProprietarioDto, imovelModel);
-		if(imovelComProprietarioDto.getProprietario() != null) {
+		if (imovelComProprietarioDto.getProprietario() != null) {
 			var proprietarioModel = new ClienteModel();
 			List<ImovelModel> imoveis = new ArrayList<ImovelModel>();
-			imoveis.add(imovelModel);	
-			BeanUtils.copyProperties(imovelComProprietarioDto.getProprietario() , proprietarioModel);
+			imoveis.add(imovelModel);
+			BeanUtils.copyProperties(imovelComProprietarioDto.getProprietario(), proprietarioModel);
 			imovelModel.setProprietario(proprietarioModel);
 			proprietarioModel.setImoveisProprietario(imoveis);
-					
+
 		}
-		
+
 		imovelModel.setRegistrationDate(LocalDateTime.now(ZoneId.of("UTC")));
 		imovelModel = imovelService.save(imovelModel);
-		BeanUtils.copyProperties( imovelModel, imovelComProprietarioDto);
+		BeanUtils.copyProperties(imovelModel, imovelComProprietarioDto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(imovelComProprietarioDto);
 	}
 
@@ -90,13 +92,13 @@ public class ImovelController {
 	public ResponseEntity<List<ImovelDto>> getAllImovel() {
 		List<ImovelModel> imoveis = imovelService.findAll();
 		List<ImovelDto> imoveisDto = new ArrayList<ImovelDto>();
-		
-		for(ImovelModel imovelModel : imoveis) {
+
+		for (ImovelModel imovelModel : imoveis) {
 			ImovelDto imovelDto = new ImovelDto();
-			BeanUtils.copyProperties( imovelModel, imovelDto);
+			BeanUtils.copyProperties(imovelModel, imovelDto);
 			imoveisDto.add(imovelDto);
 		}
-		
+
 		return ResponseEntity.status(HttpStatus.OK).body(imoveisDto);
 	}
 
@@ -108,12 +110,42 @@ public class ImovelController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" Imovel not found");
 
 		}
-		BeanUtils.copyProperties( imovelModelOptional.get(), imovelDto);
+		BeanUtils.copyProperties(imovelModelOptional.get(), imovelDto);
 
 		return ResponseEntity.status(HttpStatus.OK).body(imovelDto);
 
 	}
+
+	@GetMapping("/getTipoImovel/{tipo}") // BUSCA por tipo
+	public ResponseEntity<List<ImovelDto>> getImoveisTipo(@PathVariable(value = "tipo") String tipo) {
+		List<ImovelModel> imoveisModel = imovelService.findByTipoImovel(tipo);
+		List<ImovelDto> imoveisDto = new ArrayList<ImovelDto>();
+
+		for (ImovelModel imovelModel : imoveisModel) {
+			ImovelDto imovelDto = new ImovelDto();
+			BeanUtils.copyProperties(imovelModel, imovelDto);
+			imoveisDto.add(imovelDto);
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(imoveisDto);
+
+	}
 	
+	@GetMapping("/getComGaragem/{true}")
+	public ResponseEntity<List<ImovelDto>> getImoveisGaragens(@PathVariable(value = "garagem")boolean garagem)
+	{
+		List<ImovelModel> imoveisModel = imovelService.findByGaragem(garagem);
+		List<ImovelDto> imoveisDto = new ArrayList<ImovelDto>();
+		
+		for (ImovelModel imovelModel : imoveisModel) {
+			ImovelDto imovelDto = new ImovelDto();
+			BeanUtils.copyProperties(imovelModel, imovelDto);
+			imoveisDto.add(imovelDto);
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(imoveisDto);
+		
+		
+	}
 	
 
 	@DeleteMapping("/{id}")
@@ -126,18 +158,18 @@ public class ImovelController {
 		return ResponseEntity.status(HttpStatus.OK).body("Imobiliaria deleted successfully. ");
 
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> upDateImovel(@PathVariable(value = "id") UUID id, 
-			@RequestBody @Valid ImovelDto imovelDto){
+	public ResponseEntity<Object> upDateImovel(@PathVariable(value = "id") UUID id,
+			@RequestBody @Valid ImovelDto imovelDto) {
 		Optional<ImovelModel> imovelModelOptional = imovelService.findById(id);
-		if(!imovelModelOptional.isPresent()) {
+		if (!imovelModelOptional.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("O Imovel Não Existe");
 		}
 		ImovelModel imovelModel = imovelModelOptional.get();
 		imovelModel.setTipoImovel(imovelDto.getTipoImovel());
 		imovelService.save(imovelModel);
-		BeanUtils.copyProperties(imovelModel,imovelDto);
+		BeanUtils.copyProperties(imovelModel, imovelDto);
 		return ResponseEntity.status(HttpStatus.OK).body(imovelDto);
 	}
 

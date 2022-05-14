@@ -38,4 +38,12 @@ public class ImovelService {
 		 imovelRepository.delete(imovelModel);
 		
 	}
+	
+	public List<ImovelModel> findByTipoImovel(String tipo){
+		return imovelRepository.findByTipoImovel(tipo);
+	}
+
+	public List<ImovelModel> findByGaragem(boolean garagem) {
+		return imovelRepository.findByGaragem(garagem);
+	}
 }

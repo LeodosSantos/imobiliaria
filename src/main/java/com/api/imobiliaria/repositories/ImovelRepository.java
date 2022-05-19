@@ -18,5 +18,6 @@ public interface ImovelRepository extends JpaRepository<ImovelModel, UUID> {
 
 	public List<ImovelModel> findByGaragem(boolean garagem);
 	
+	
 
 }
